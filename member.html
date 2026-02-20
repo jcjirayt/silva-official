@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SILVA | MEMBERS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+  <script>
+    /* ── PROTECTION ── */
+    document.addEventListener('contextmenu', function(e){ e.preventDefault(); return false; });
+    document.addEventListener('keydown', function(e){
+      const k = e.key.toLowerCase();
+      if(e.key === 'F12'){ e.preventDefault(); return false; }
+      if((e.ctrlKey||e.metaKey) && e.shiftKey && (k==='i'||k==='j'||k==='c')){ e.preventDefault(); return false; }
+      if((e.ctrlKey||e.metaKey) && k==='u'){ e.preventDefault(); return false; }
+      if((e.ctrlKey||e.metaKey) && k==='s'){ e.preventDefault(); return false; }
+      if((e.ctrlKey||e.metaKey) && k==='a' && !['input','textarea'].includes(document.activeElement.tagName.toLowerCase())){ e.preventDefault(); return false; }
+    });
+    document.addEventListener('selectstart', function(e){
+      if(!['input','textarea'].includes(e.target.tagName.toLowerCase())){ e.preventDefault(); return false; }
+    });
+  </script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{width:100%;min-height:100%;overflow-x:hidden}
+    body{background:#0a0a0a;color:#fff;font-family:'Rajdhani',sans-serif;user-select:none;-webkit-user-select:none;-moz-user-select:none;}
+
+    /* BACKGROUND */
+    .bg-layer{position:fixed;inset:0;z-index:0;background:#0a0a0a;}
+    .bg-layer::after{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(-55deg,rgba(255,255,255,0.012) 0px,rgba(255,255,255,0.012) 1px,transparent 1px,transparent 60px);}
+    .scanlines{position:fixed;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.06) 2px,rgba(0,0,0,0.06) 4px);}
+
+    /* TOP BAR */
+    .topbar{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;padding:12px 24px;background:rgba(8,8,8,0.85);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.05);}
+    .tb-pill{background:#fff;color:#000;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:800;letter-spacing:2px;padding:5px 16px;border-radius:999px;position:relative;overflow:hidden;}
+    .tb-pill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(0,0,0,0.15),transparent);transform:translateX(-100%);animation:pillShine 3s ease-in-out infinite;}
+    @keyframes pillShine{0%,60%,100%{transform:translateX(-100%)}80%{transform:translateX(100%)}}
+    .tb-word{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:600;letter-spacing:4px;color:#fff;margin-left:10px;}
+    .tb-rule{flex:1;height:1px;background:linear-gradient(90deg,rgba(255,255,255,0.12),transparent);margin-left:18px;}
+    .tb-back{font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:3px;color:rgba(255,255,255,0.3);text-decoration:none;transition:color 0.2s,letter-spacing 0.2s;white-space:nowrap;margin-left:18px;}
+    .tb-back:hover{color:#fff;letter-spacing:4px;}
+    .tb-status{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.2);display:flex;align-items:center;gap:6px;margin-left:18px;}
+    .tb-dot{width:5px;height:5px;border-radius:50%;background:#00e676;box-shadow:0 0 8px rgba(0,230,118,0.8);animation:dotPulse 2s ease-in-out infinite;}
+    @keyframes dotPulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+    /* PAGE */
+    .page{position:relative;z-index:10;padding:90px 40px 120px;max-width:1300px;margin:0 auto;}
+    .page-head{text-align:center;padding:30px 0 60px;}
+    .ph-hero{display:inline-flex;align-items:center;justify-content:center;position:relative;}
+    .ph-title{font-family:'Orbitron',sans-serif;font-size:clamp(36px,7vw,100px);font-weight:900;letter-spacing:clamp(8px,2.5vw,28px);color:#fff;line-height:1;text-shadow:0 0 30px rgba(255,255,255,0.9),0 0 70px rgba(255,255,255,0.5),0 0 140px rgba(255,255,255,0.15);}
+    .ph-title.glitching{animation:glitch 0.25s steps(2) forwards;}
+    @keyframes glitch{
+      0%{text-shadow:0 0 30px rgba(255,255,255,0.9),0 0 70px rgba(255,255,255,0.5),-2px 0 rgba(255,0,80,0.8),2px 0 rgba(0,200,255,0.8)}
+      50%{text-shadow:2px 0 30px rgba(255,255,255,0.9),-3px 0 rgba(255,0,80,0.6),4px 0 rgba(0,200,255,0.6)}
+      100%{text-shadow:0 0 30px rgba(255,255,255,0.9),0 0 70px rgba(255,255,255,0.5),0 0 140px rgba(255,255,255,0.15)}
+    }
+    .ph-cursor{display:inline-block;width:3px;height:0.78em;background:#fff;margin-left:6px;vertical-align:middle;box-shadow:0 0 16px rgba(255,255,255,0.9);animation:phcur 1s step-end infinite;}
+    @keyframes phcur{0%,100%{opacity:1}50%{opacity:0}}
+    .ph-accent{width:2px;height:clamp(55px,8vw,100px);background:linear-gradient(180deg,rgba(255,255,255,0),#fff,rgba(255,255,255,0));margin-left:clamp(10px,1.8vw,22px);box-shadow:0 0 16px rgba(255,255,255,0.5);flex-shrink:0;}
+    .ph-sub{font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:6px;color:rgba(255,255,255,0.2);margin-top:14px;text-transform:uppercase;}
+
+    /* SEARCH BAR */
+    .search-bar{display:flex;align-items:center;gap:10px;background:rgba(14,15,18,0.9);border:1px solid rgba(255,255,255,0.07);border-radius:4px;padding:10px 16px;max-width:400px;margin:0 auto 40px;transition:border-color 0.3s;}
+    .search-bar:focus-within{border-color:rgba(255,255,255,0.25);}
+    .search-icon{font-family:'Share Tech Mono',monospace;color:rgba(255,255,255,0.25);font-size:12px;}
+    .search-input{background:none;border:none;outline:none;color:#fff;font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:2px;width:100%;user-select:auto;-webkit-user-select:auto;}
+    .search-input::placeholder{color:rgba(255,255,255,0.2);letter-spacing:2px;}
+
+    /* SECTION HEADS */
+    .section-head{display:flex;align-items:center;gap:14px;margin-bottom:16px;margin-top:50px;}
+    .sh-title{font-family:'Orbitron',sans-serif;font-size:clamp(13px,2.2vw,20px);font-weight:700;letter-spacing:4px;text-transform:uppercase;white-space:nowrap;}
+    .founder-color{color:#f5a623;text-shadow:0 0 18px rgba(245,166,35,0.5);}
+    .leader-color{color:#e03a3a;text-shadow:0 0 18px rgba(224,58,58,0.5);}
+    .senior-color{color:#a78bfa;text-shadow:0 0 18px rgba(167,139,250,0.5);}
+    .member-color{color:rgba(255,255,255,0.65);}
+    .sh-count{font-family:'Share Tech Mono',monospace;font-size:12px;color:rgba(255,255,255,0.25);letter-spacing:1px;}
+    .sh-rule{flex:1;height:1px;background:rgba(255,255,255,0.07);}
+
+    /* MEMBER GRID */
+    .member-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:10px;}
+    .mcard{background:#111214;border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:14px 14px 12px;display:flex;align-items:flex-start;gap:14px;transition:border-color 0.25s,background 0.25s,transform 0.25s,box-shadow 0.25s;position:relative;overflow:hidden;}
+    .mcard::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.25s;pointer-events:none;}
+    .mcard:hover{background:#16181c;transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,0.4);}
+    .mcard:hover::before{opacity:1;}
+
+    /* CARD CORNER ACCENT */
+    .mcard::after{content:'';position:absolute;bottom:0;right:0;width:16px;height:16px;border-bottom:1px solid rgba(255,255,255,0.08);border-right:1px solid rgba(255,255,255,0.08);transition:width 0.25s,height 0.25s;}
+    .mcard:hover::after{width:24px;height:24px;}
+
+    .fc{border-left:2px solid rgba(245,166,35,0.5);}
+    .fc::before{background:linear-gradient(90deg,rgba(245,166,35,0.05),transparent);}
+    .fc:hover{border-color:rgba(245,166,35,0.7);box-shadow:0 12px 40px rgba(0,0,0,0.4),0 0 20px rgba(245,166,35,0.05);}
+    .lc{border-left:2px solid rgba(224,58,58,0.5);}
+    .lc::before{background:linear-gradient(90deg,rgba(224,58,58,0.05),transparent);}
+    .lc:hover{border-color:rgba(224,58,58,0.7);box-shadow:0 12px 40px rgba(0,0,0,0.4),0 0 20px rgba(224,58,58,0.05);}
+    .sc{border-left:2px solid rgba(167,139,250,0.5);}
+    .sc::before{background:linear-gradient(90deg,rgba(167,139,250,0.05),transparent);}
+    .sc:hover{border-color:rgba(167,139,250,0.7);box-shadow:0 12px 40px rgba(0,0,0,0.4),0 0 20px rgba(167,139,250,0.05);}
+    .mc{border-left:2px solid rgba(255,255,255,0.1);}
+    .mc::before{background:linear-gradient(90deg,rgba(255,255,255,0.02),transparent);}
+    .mc:hover{border-color:rgba(255,255,255,0.22);}
+
+    .mphoto{width:60px;height:60px;border-radius:5px;overflow:hidden;background:#1e2024;flex-shrink:0;position:relative;display:flex;align-items:center;justify-content:center;transition:transform 0.25s;}
+    .mcard:hover .mphoto{transform:scale(1.05);}
+    .mphoto img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0;}
+    .mphoto.no-photo::after{content:'';display:block;width:28px;height:28px;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='32' cy='24' r='12' fill='white' opacity='0.18'/%3E%3Cpath d='M12 54c0-11 8.95-20 20-20s20 8.95 20 20' stroke='white' stroke-width='3' fill='none' opacity='0.18'/%3E%3C/svg%3E") center/contain no-repeat;}
+    .mdot{position:absolute;bottom:3px;left:3px;width:8px;height:8px;border-radius:50%;background:#00e676;border:2px solid #111214;box-shadow:0 0 6px rgba(0,230,118,0.7);z-index:2;animation:dotPulse 2s ease-in-out infinite;}
+    .minfo{flex:1;min-width:0;}
+    .mrank{font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;margin-bottom:3px;font-weight:600;}
+    .mrank.f{color:#f5a623;} .mrank.l{color:#e03a3a;} .mrank.s{color:#a78bfa;} .mrank.m{color:rgba(255,255,255,0.28);}
+    .mname{font-family:'Orbitron',sans-serif;font-size:clamp(11px,1.5vw,14px);font-weight:600;letter-spacing:2px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .msocials{display:flex;flex-direction:row;gap:6px;margin-top:9px;flex-wrap:wrap;}
+    .slink{display:inline-flex;align-items:center;gap:5px;text-decoration:none;font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:1px;transition:opacity 0.2s,transform 0.15s,box-shadow 0.2s;opacity:0.42;border:1px solid rgba(255,255,255,0.07);border-radius:3px;padding:4px 8px;white-space:nowrap;}
+    .slink:hover{opacity:1;transform:translateY(-2px);}
+    .slink-fb{color:#4a9eff;border-color:rgba(74,158,255,0.18);}
+    .slink-fb:hover{border-color:rgba(74,158,255,0.5);background:rgba(74,158,255,0.06);box-shadow:0 4px 12px rgba(74,158,255,0.15);}
+    .slink-tt{color:#fff;border-color:rgba(255,255,255,0.12);}
+    .slink-tt:hover{border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.03);}
+    .slink-yt{color:#ff4040;border-color:rgba(255,64,64,0.18);}
+    .slink-yt:hover{border-color:rgba(255,64,64,0.5);background:rgba(255,64,64,0.06);box-shadow:0 4px 12px rgba(255,64,64,0.15);}
+    .slink svg{width:11px;height:11px;flex-shrink:0;}
+
+    /* HIDDEN by search */
+    .mcard.hidden{display:none;}
+
+    /* BOTTOM BAR */
+    .botbar{position:fixed;bottom:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:8px 24px;background:rgba(8,8,8,0.8);backdrop-filter:blur(14px);border-top:1px solid rgba(255,255,255,0.04);}
+    .credit{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.12);text-transform:uppercase;}
+    .mwidget{display:flex;align-items:center;gap:10px;background:rgba(18,18,18,0.9);border:1px solid rgba(255,255,255,0.07);border-radius:4px;padding:6px 12px 6px 8px;cursor:pointer;transition:border-color 0.3s;user-select:none;}
+    .mwidget:hover{border-color:rgba(255,255,255,0.2);}
+    .mthumb{width:28px;height:28px;border-radius:3px;overflow:hidden;background:#1a1a1a;flex-shrink:0;}
+    .mthumb img{width:100%;height:100%;object-fit:cover;}
+    .mtext{text-align:left;}
+    .mtitle{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;color:#fff;letter-spacing:1px;}
+    .msub{font-family:'Rajdhani',sans-serif;font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:1px;}
+    .meq{display:flex;align-items:flex-end;gap:2px;height:13px;margin-left:4px;}
+    .meq span{width:3px;background:#fff;border-radius:1px;animation:meqa .65s ease-in-out infinite alternate;}
+    .meq span:nth-child(1){height:5px;animation-delay:0s}.meq span:nth-child(2){height:11px;animation-delay:0.15s}.meq span:nth-child(3){height:7px;animation-delay:0.3s}
+    .meq.off span{animation:none;height:3px;}
+    @keyframes meqa{from{transform:scaleY(0.15)}to{transform:scaleY(1)}}
+    .micon{font-size:13px;color:rgba(255,255,255,0.35);margin-left:2px;}
+  </style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<div class="scanlines"></div>
+
+<audio id="bgmusic" src="music.mp3" loop preload="auto" muted playsinline></audio>
+
+<header class="topbar">
+  <div class="tb-pill">SILVA</div>
+  <div class="tb-word">GANG</div>
+  <div class="tb-rule"></div>
+  <div class="tb-status"><span class="tb-dot"></span>ACTIVE</div>
+  <a href="index.html" class="tb-back">← BACK</a>
+</header>
+
+<div class="page">
+  <div class="page-head">
+    <div class="ph-hero">
+      <div class="ph-title" id="ph-title"><span id="ph-typed"></span><span class="ph-cursor"></span></div>
+      <div class="ph-accent"></div>
+    </div>
+    <div class="ph-sub">SILVA GANG &nbsp;·&nbsp; SILVA SYSTEM</div>
+    <div class="search-bar" style="margin-top:28px;">
+      <span class="search-icon">⌕</span>
+      <input class="search-input" id="search-input" type="text" placeholder="SEARCH MEMBER..." autocomplete="off"/>
+    </div>
+  </div>
+  <div id="members-root"></div>
+</div>
+
+<footer class="botbar">
+  <div class="credit">SYSTEM DESIGN BY SILVA</div>
+  <div class="mwidget" onclick="toggleMusic()" id="mwidget">
+    <div class="mthumb"><img src="https://i.ytimg.com/vi/MgY01n03QLU/default.jpg" alt=""/></div>
+    <div class="mtext">
+      <div class="mtitle" id="mtitle">NOW PLAYING</div>
+      <div class="msub">SILVA AUDIO SYSTEM</div>
+    </div>
+    <div class="meq" id="meq"><span></span><span></span><span></span></div>
+    <div class="micon" id="micon">‖</div>
+  </div>
+</footer>
+
+<script>
+
+
+const ICONS = {
+  fb:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`,
+  tt:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.75a8.24 8.24 0 004.82 1.55V6.85a4.85 4.85 0 01-1.05-.16z"/></svg>`,
+  yt:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>`
+};
+
+const MEMBERS = [
+  {rank:'FOUDER', name:'Zillx', lastname:'SIlva', fb:'https://www.facebook.com/sil.si.l.wa.2024', tiktok:'https://www.tiktok.com/@zill.silva2', youtube:'https://www.youtube.com/@zillsilva510', profile:'https://scontent.fbkk29-7.fna.fbcdn.net/v/t39.30808-6/480330232_613963054775052_6894066649046743575_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=13d280&_nc_ohc=adhDx1e_szAQ7kNvwGGeZu7&_nc_oc=AdnBmGbGWzVTUS6cZEVNPJPbGGzF4AEaARuJ-GMBsl9GJ14tlMPHGTyTRYAhfMIgTX8&_nc_zt=23&_nc_ht=scontent.fbkk29-7.fna&_nc_gid=RVyELZ4clvgON3jssd0Vug&oh=00_AfvGW9A5-qLeeJ33hZVrrbB4YFVTvf-jzTegBOmh_VQF-g&oe=699DD7BC'},
+  {rank:'LEADERS', name:'Safe', lastname:'SIlva', fb:'https://www.facebook.com/sxfetnn.boy', tiktok:'', youtube:'', profile:'https://scontent.fbkk29-4.fna.fbcdn.net/v/t39.30808-1/629278323_894061946747534_6500762420949417718_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=111&ccb=1-7&_nc_sid=e99d92&_nc_ohc=Lb-gyfcGeq0Q7kNvwFecWt-&_nc_oc=AdnabZVFJIH7fMoIgTeodlI9IJvTiwMn2qsTK-Q12iprSP-fdrArVumKy3bIo7NnGqU&_nc_zt=24&_nc_ht=scontent.fbkk29-4.fna&_nc_gid=FWmHoKVTCzSuYqM51chNQw&oh=00_AfuMi_rWP_MqfY4qdSUI438d4S8NarvdDSOUocbuPwHTNQ&oe=699DF282'},
+  {rank:'LEADERS', name:'Jaynosx', lastname:'SIlva', fb:'https://www.facebook.com/jaynosx.sentury', tiktok:'', youtube:'https://www.youtube.com/@Jaynosx', profile:''},
+  {rank:'LEADERS', name:'Lyker', lastname:'SIlva', fb:'https://www.facebook.com/lyker.glaywind', tiktok:'', youtube:'', profile:''},
+  {rank:'SENIORS', name:'Levi', lastname:'SIlva', fb:'https://www.facebook.com/levi.suntory', tiktok:'', youtube:'', profile:'https://scontent.fbkk29-7.fna.fbcdn.net/v/t39.30808-1/548227797_772995095347446_4086456321458272668_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=106&ccb=1-7&_nc_sid=1d2534&_nc_ohc=_6eilwH0vMIQ7kNvwF1JgUO&_nc_oc=AdnHHGEfMupv77Lj3PhBYzIhAy8w21EAf_11cXlgKqeCXzf9Q1vnIHpIn3gOkbvOaQ4&_nc_zt=24&_nc_ht=scontent.fbkk29-7.fna&_nc_gid=j4RpUQeqNDHTOAwvguznhQ&oh=00_Aftmx0ewPgSYzV9xwGFzfA7Y5CJEzCRnPnKPWy9UcrEwOg&oe=699DD86D'},
+  {rank:'SENIORS', name:'Lydia', lastname:'SIlva', fb:'https://www.facebook.com/d.ch.li.deiyr', tiktok:'https://www.tiktok.com/@lydiadekfamus', youtube:'', profile:'https://scontent.fbkk29-4.fna.fbcdn.net/v/t39.30808-6/611272508_872542942348741_8130548560952410738_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=nTN2xr8fi4UQ7kNvwFNfUCW&_nc_oc=AdnUypZhncRPX6SdmKL-qBmrUO3DVxLNys9HH5dfsQzjv49g5NxHULGhI8v346TZsJU&_nc_zt=23&_nc_ht=scontent.fbkk29-4.fna&_nc_gid=QtfdWdJWXaaberNz8FURZg&oh=00_AftyZzwVe6wcnHwPC0fRK60zg9kxGDuaHoLj8_JTHPBJTw&oe=699DFA77'},
+  {rank:'SENIORS', name:'Arfei', lastname:'SIlva', fb:'https://www.facebook.com/profile.php?id=61588319216546', tiktok:'', youtube:'', profile:'https://scontent.fbkk29-9.fna.fbcdn.net/v/t39.30808-6/636673194_122094566277277307_42842672109568935_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=4b73FUfhIm4Q7kNvwGDMTBB&_nc_oc=AdmwfdHXOti0yP8l4nrUwaz7V9unvnD-BbJRnskRgl9uc0p5B-xlQH4HjDFcJF-RFAI&_nc_zt=23&_nc_ht=scontent.fbkk29-9.fna&_nc_gid=VJHjKK96M0iK_HNV9ZwC-Q&oh=00_AftXibcF0JS7AzItVN10r8nFkdvE_qvGZyS30uUHTSjzVA&oe=699DD456'},
+  {rank:'SENIORS', name:'Afei', lastname:'Silva', fb:'https://www.facebook.com/afei.afeizz/', tiktok:'https://www.tiktok.com/@afeihlw', youtube:'', profile:'https://scontent.fbkk29-4.fna.fbcdn.net/v/t39.30808-6/625772515_1442864294172182_7298289467114090591_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=CSkD10iuYl4Q7kNvwHH0Him&_nc_oc=AdlVeol4Lj10FhM5dvgiHMl-zi3RNs9-9lBZNKGaBgBG9-aV_ytgbjixhR9pkZanw3g&_nc_zt=23&_nc_ht=scontent.fbkk29-4.fna&_nc_gid=QE7oRfd8YHU9nH4tJtuHGw&oh=00_AftlXZ8ptH1uxNUl2Ws3vaGimLS_poaGCo2vzegfQ6Z9UA&oe=699DE15E'},
+  {rank:'SENIORS', name:'Koko', lastname:'SIlva', fb:'https://www.facebook.com/koko.cardinale', tiktok:'', youtube:'', profile:''},
+  {rank:'SENIORS', name:'Winx', lastname:'SIlva', fb:'https://www.facebook.com/winfer.konmunjabad', tiktok:'', youtube:'', profile:'https://scontent.fbkk29-9.fna.fbcdn.net/v/t39.30808-6/629666137_907272285047137_5660519385162628202_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=TouUWbyWmckQ7kNvwFEI-2X&_nc_oc=AdlVFAcjGwNcBAJ7Xa75iRzVW6kaY_nB2Br97aJnxmWtd8iqN-VnhNwEiQ-ws56WNlw&_nc_zt=23&_nc_ht=scontent.fbkk29-9.fna&_nc_gid=LLy4KeD7svCxPebM_MfW6w&oh=00_Afv_KfY4rfAGdBQuWfkg0ZQA3jxqtpHH05X3Yc-MwJjH6g&oe=699DD47A'},
+  {rank:'MEMBERS', name:'Kuay', lastname:'SIlva', fb:'', tiktok:'', youtube:'', profile:''},
+  {rank:'MEMBERS', name:'Hee', lastname:'SIlva', fb:'', tiktok:'', youtube:'', profile:''},
+  {rank:'MEMBERS', name:'Yed', lastname:'SIlva', fb:'', tiktok:'', youtube:'', profile:''},
+  {rank:'MEMBERS', name:'Kuy', lastname:'SIlva', fb:'', tiktok:'', youtube:'', profile:''},
+  {rank:'MEMBERS', name:'Jo', lastname:'SIlva', fb:'', tiktok:'', youtube:'', profile:''},
+  {rank:'MEMBERS', name:'Eiei', lastname:'SIlva', fb:'', tiktok:'', youtube:'', profile:''},
+];
+
+function renderMembers(data) {
+  const ORDER = ['FOUDER','LEADERS','SENIORS','MEMBERS'];
+  const RANK_CONFIG = {
+    'FOUDER':  {label:'FOUNDER',  cls:'fc', rankCls:'f', colorCls:'founder-color', icon:'★'},
+    'LEADERS': {label:'LEADERS',  cls:'lc', rankCls:'l', colorCls:'leader-color',  icon:'◈'},
+    'SENIORS': {label:'SENIORS',  cls:'sc', rankCls:'s', colorCls:'senior-color',  icon:'◆'},
+    'MEMBERS': {label:'MEMBERS',  cls:'mc', rankCls:'m', colorCls:'member-color',  icon:'◆'},
+  };
+  const groups = {};
+  ORDER.forEach(r => groups[r] = []);
+  data.forEach(m => { const r = m.rank.toUpperCase(); if(groups[r]) groups[r].push(m); });
+
+  let html = '';
+  ORDER.forEach(rankKey => {
+    const members = groups[rankKey];
+    if(!members || !members.length) return;
+    const cfg = RANK_CONFIG[rankKey];
+    html += `<div class="section-head">
+      <div class="sh-title ${cfg.colorCls}">${cfg.label}</div>
+      <div class="sh-count">[${String(members.length).padStart(2,'0')}]</div>
+      <div class="sh-rule"></div>
+    </div>
+    <div class="member-grid">`;
+    members.forEach(m => {
+      const fullName = m.lastname ? `${m.name} ${m.lastname}` : m.name;
+      let socials = '';
+      if(m.fb)      socials += `<a class="slink slink-fb" href="${m.fb}" target="_blank">${ICONS.fb} Facebook</a>`;
+      if(m.tiktok)  socials += `<a class="slink slink-tt" href="${m.tiktok}" target="_blank">${ICONS.tt} TikTok</a>`;
+      if(m.youtube) socials += `<a class="slink slink-yt" href="${m.youtube}" target="_blank">${ICONS.yt} YouTube</a>`;
+      html += `<div class="mcard ${cfg.cls}" data-name="${fullName.toLowerCase()} ${cfg.label.toLowerCase()}">
+        <div class="mphoto${m.profile ? '' : ' no-photo'}">
+          ${m.profile ? `<img src="${m.profile}" alt="${m.name}" onerror="this.parentElement.classList.add('no-photo');this.remove()">` : ''}
+          <div class="mdot"></div>
+        </div>
+        <div class="minfo">
+          <div class="mrank ${cfg.rankCls}">${cfg.icon} ${cfg.label}</div>
+          <div class="mname">${fullName}</div>
+          ${socials ? `<div class="msocials">${socials}</div>` : ''}
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  document.getElementById('members-root').innerHTML = html;
+
+  document.querySelectorAll('.mcard').forEach((c,i) => {
+    c.style.cssText += `opacity:0;transform:translateY(14px);`;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      c.style.transition=`opacity 0.4s ${i*0.035}s ease,transform 0.4s ${i*0.035}s ease,border-color 0.25s,background 0.25s,box-shadow 0.25s`;
+      c.style.opacity='1';c.style.transform='translateY(0)';
+    }));
+  });
+
+  /* cursor expand on cards - removed */
+}
+
+/* ── SEARCH ── */
+document.getElementById('search-input').addEventListener('input',function(){
+  const q=this.value.toLowerCase().trim();
+  document.querySelectorAll('.mcard').forEach(card=>{
+    const name=card.dataset.name||'';
+    card.classList.toggle('hidden',q&&!name.includes(q));
+  });
+});
+
+/* ── TYPEWRITER ── */
+const PH_WORD='MEMBERS';
+const phEl=document.getElementById('ph-typed');
+const phTitle=document.getElementById('ph-title');
+let phPos=0,phPhase='type';
+function phTick(){
+  if(phPhase==='type'){
+    if(phPos<PH_WORD.length){phEl.textContent=PH_WORD.slice(0,++phPos);setTimeout(phTick,100);}
+    else{phPhase='hold';setTimeout(phTick,3000);}
+  } else if(phPhase==='hold'){
+    phTitle.classList.add('glitching');
+    setTimeout(()=>phTitle.classList.remove('glitching'),250);
+    phPhase='erase';setTimeout(phTick,600);
+  } else {
+    if(phPos>0){phEl.textContent=PH_WORD.slice(0,--phPos);setTimeout(phTick,50);}
+    else{phPhase='type';setTimeout(phTick,600);}
+  }
+}
+phTick();
+setInterval(()=>{if(Math.random()<0.25){phTitle.classList.add('glitching');setTimeout(()=>phTitle.classList.remove('glitching'),200);}},4000);
+
+renderMembers(MEMBERS);
+
+/* ── MUSIC ── */
+const audio=document.getElementById('bgmusic');
+let isPaused=false,unmuteTriggered=false;
+audio.volume=0.7;audio.muted=true;audio.play().catch(()=>{});
+const UNMUTE_EVENTS=['click','touchstart','mousedown'];
+function onFirstInteraction(){
+  if(unmuteTriggered)return;
+  unmuteTriggered=true;audio.muted=false;if(audio.paused)audio.play().catch(()=>{});
+  setWidgetState(true);UNMUTE_EVENTS.forEach(ev=>document.removeEventListener(ev,onFirstInteraction));
+}
+UNMUTE_EVENTS.forEach(ev=>document.addEventListener(ev,onFirstInteraction,{passive:true}));
+setTimeout(()=>{if(!unmuteTriggered){audio.muted=false;if(audio.paused)audio.play().catch(()=>{});unmuteTriggered=true;setWidgetState(true);}},3000);
+
+function setWidgetState(playing){
+  const meq=document.getElementById('meq'),micon=document.getElementById('micon'),mtitle=document.getElementById('mtitle');
+  if(!playing){meq.classList.add('off');micon.textContent='▶';mtitle.textContent='PAUSED';}
+  else{meq.classList.remove('off');micon.textContent='‖';mtitle.textContent='NOW PLAYING';}
+}
+function toggleMusic(){
+  if(audio.paused){audio.muted=false;audio.play().catch(()=>{});isPaused=false;setWidgetState(true);}
+  else{audio.pause();isPaused=true;setWidgetState(false);}
+}
+</script>
+</body>
+</html>
