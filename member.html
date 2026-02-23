@@ -244,6 +244,7 @@ const MEMBERS = [
   {rank:'SENIORS', name:'Afei', lastname:'Silva', fb:'https://www.facebook.com/afei.afeizz/', tiktok:'https://www.tiktok.com/@afeihlw', youtube:'', profile:'https://scontent.fbkk29-4.fna.fbcdn.net/v/t39.30808-6/625772515_1442864294172182_7298289467114090591_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=CSkD10iuYl4Q7kNvwHH0Him&_nc_oc=AdlVeol4Lj10FhM5dvgiHMl-zi3RNs9-9lBZNKGaBgBG9-aV_ytgbjixhR9pkZanw3g&_nc_zt=23&_nc_ht=scontent.fbkk29-4.fna&_nc_gid=QE7oRfd8YHU9nH4tJtuHGw&oh=00_AftlXZ8ptH1uxNUl2Ws3vaGimLS_poaGCo2vzegfQ6Z9UA&oe=699DE15E'},
   {rank:'SENIORS', name:'Koko', lastname:'SIlva', fb:'https://www.facebook.com/koko.cardinale', tiktok:'', youtube:'', profile:''},
   {rank:'SENIORS', name:'Winx', lastname:'SIlva', fb:'https://www.facebook.com/winfer.konmunjabad', tiktok:'', youtube:'', profile:'https://scontent.fbkk29-9.fna.fbcdn.net/v/t39.30808-6/629666137_907272285047137_5660519385162628202_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=TouUWbyWmckQ7kNvwFEI-2X&_nc_oc=AdlVFAcjGwNcBAJ7Xa75iRzVW6kaY_nB2Br97aJnxmWtd8iqN-VnhNwEiQ-ws56WNlw&_nc_zt=23&_nc_ht=scontent.fbkk29-9.fna&_nc_gid=LLy4KeD7svCxPebM_MfW6w&oh=00_Afv_KfY4rfAGdBQuWfkg0ZQA3jxqtpHH05X3Yc-MwJjH6g&oe=699DD47A'},
+  {rank:'MEMBERS', name:'Nxrd', lastname:'Silva', fb:'https://www.facebook.com/nxrd.winterfell.alpha', tiktok:'', youtube:'', profile:'https://scontent.fbkk29-9.fna.fbcdn.net/v/t39.30808-6/481071208_560815766976788_1160602786150639938_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=53a332&_nc_ohc=ZzB1ZHhel2wQ7kNvwGLDxau&_nc_oc=AdkTamJeQr5EVbBc7B1T6sYkXPhbff9jNz_wO-OQKE031yfH0d9-NJzPHgCDUHKyoec&_nc_zt=23&_nc_ht=scontent.fbkk29-9.fna&_nc_gid=CFDLcbw5Wx6PBJVdHpJXNQ&oh=00_AfuTXJgbpMO2auLE0isIQFikHAnEtkJsWGoSv9hBCuCz-w&oe=69A1B9C5'},
   {rank:'MEMBERS', name:'Kuay', lastname:'SIlva', fb:'', tiktok:'', youtube:'', profile:''},
   {rank:'MEMBERS', name:'Hee', lastname:'SIlva', fb:'', tiktok:'', youtube:'', profile:''},
   {rank:'MEMBERS', name:'Yed', lastname:'SIlva', fb:'', tiktok:'', youtube:'', profile:''},
@@ -258,7 +259,7 @@ function renderMembers(data) {
     'FOUDER':  {label:'FOUNDER',  cls:'fc', rankCls:'f', colorCls:'founder-color', icon:'★'},
     'LEADERS': {label:'LEADERS',  cls:'lc', rankCls:'l', colorCls:'leader-color',  icon:'◈'},
     'SENIORS': {label:'SENIORS',  cls:'sc', rankCls:'s', colorCls:'senior-color',  icon:'◆'},
-    'MEMBERS': {label:'MEMBERS',  cls:'mc', rankCls:'m', colorCls:'member-color',  icon:'◆'},
+    'MEMBERS': {label:'JUNIOR',  cls:'mc', rankCls:'m', colorCls:'member-color',  icon:'◆'},
   };
   const groups = {};
   ORDER.forEach(r => groups[r] = []);
@@ -341,18 +342,30 @@ setInterval(()=>{if(Math.random()<0.25){phTitle.classList.add('glitching');setTi
 /* ── STAT DATA ── */
 const STAT_LABELS = ['ไม้','มีด','เทคนิค','การเอาตัวรอด','เสียง','ชุบ'];
 
-function getStats(name) {
+function getStats(name, rank) {
   const n = name.toLowerCase();
+  const r = (rank || '').toUpperCase();
   if (n === 'afei' || n.startsWith('afei ')) {
     return [1000000, 1000000, 1000000, 1000000, 1000000, 1000000];
+  }
+  if (n === 'lyker' || n.startsWith('lyker ')) {
+    let h = 0;
+    for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) & 0xffffffff;
+    const base = STAT_LABELS.map((_, i) => Math.round(120 + Math.abs(Math.sin(h + i * 7919)) * 15));
+    base[0] = 100;      // ไม้
+    base[4] = 1000000;  // เสียง
+    return base;
   }
   // seed random per name for consistency
   let h = 0;
   for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) & 0xffffffff;
-  return STAT_LABELS.map((_, i) => {
-    const r = Math.abs(Math.sin(h + i * 7919)) ;
-    return Math.round(50 + r * 10);
-  });
+  // Founder & Leaders get 120+
+  const isElite = r === 'FOUDER' || r === 'LEADERS';
+  if (isElite) {
+    return STAT_LABELS.map((_, i) => Math.round(120 + Math.abs(Math.sin(h + i * 7919)) * 20));
+  }
+  // Everyone else 90-100
+  return STAT_LABELS.map((_, i) => Math.round(90 + Math.abs(Math.sin(h + i * 7919)) * 10));
 }
 
 function drawHex(canvas, stats, isGod) {
@@ -362,6 +375,7 @@ function drawHex(canvas, stats, isGod) {
   const cx = W / 2, cy = H / 2, R = Math.min(W, H) * 0.34;
   const N = 6;
   const angle = i => (Math.PI / 180) * (60 * i - 90);
+  const maxVal = Math.max(...stats);
 
   // grid rings
   [0.25, 0.5, 0.75, 1].forEach(f => {
@@ -388,10 +402,10 @@ function drawHex(canvas, stats, isGod) {
   }
 
   // stat polygon
-  const maxVal = isGod ? 1000000 : 70;
+  const ratio_fn = v => Math.min(v / maxVal, 1);
   ctx.beginPath();
   stats.forEach((v, i) => {
-    const ratio = Math.min(v / maxVal, 1);
+    const ratio = ratio_fn(v);
     const x = cx + R * ratio * Math.cos(angle(i));
     const y = cy + R * ratio * Math.sin(angle(i));
     i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
@@ -415,7 +429,7 @@ function drawHex(canvas, stats, isGod) {
 
   // dots
   stats.forEach((v, i) => {
-    const ratio = Math.min(v / maxVal, 1);
+    const ratio = ratio_fn(v);
     const x = cx + R * ratio * Math.cos(angle(i));
     const y = cy + R * ratio * Math.sin(angle(i));
     ctx.beginPath();
@@ -438,7 +452,7 @@ function drawHex(canvas, stats, isGod) {
 
 function openStatPopup(member, rankLabel) {
   const name = member.lastname ? `${member.name} ${member.lastname}` : member.name;
-  const stats = getStats(member.name);
+  const stats = getStats(member.name, member.rank);
   const isGod = member.name.toLowerCase() === 'afei';
 
   document.getElementById('stat-name').textContent = name;
@@ -452,14 +466,14 @@ function openStatPopup(member, rankLabel) {
   }
 
   // bars
-  const maxVal = isGod ? 1000000 : 70;
+  const maxVal = Math.max(...stats);
   const barsEl = document.getElementById('stat-bars');
   barsEl.innerHTML = STAT_LABELS.map((lbl, i) => {
     const pct = Math.min((stats[i] / maxVal) * 100, 100);
-    const display = isGod ? stats[i].toLocaleString() : stats[i];
+    const display = stats[i] >= 1000000 ? stats[i].toLocaleString() : stats[i];
     return `<div class="sbar-item">
       <div class="sbar-label">${lbl}<span>${display}</span></div>
-      <div class="sbar-track"><div class="sbar-fill${isGod ? ' god' : ''}" style="width:0%" data-pct="${pct}"></div></div>
+      <div class="sbar-track"><div class="sbar-fill${isGod ? ' god' : (stats[i] >= 1000000 ? ' god' : '')}" style="width:0%" data-pct="${pct}"></div></div>
     </div>`;
   }).join('');
 
@@ -486,7 +500,7 @@ renderMembers(MEMBERS);
 
 // Attach stat popup click to each card
 (function attachStatClicks() {
-  const RANK_LABELS = {FOUDER:'FOUNDER',LEADERS:'LEADERS',SENIORS:'SENIORS',MEMBERS:'MEMBERS'};
+  const RANK_LABELS = {FOUDER:'FOUNDER',LEADERS:'LEADERS',SENIORS:'SENIORS',MEMBERS:'JUNIOR'};
   MEMBERS.forEach(m => {
     const fullName = (m.lastname ? `${m.name} ${m.lastname}` : m.name).toLowerCase();
     document.querySelectorAll('.mcard').forEach(card => {
