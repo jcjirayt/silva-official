@@ -139,6 +139,29 @@
     .meq.off span{animation:none;height:3px;}
     @keyframes meqa{from{transform:scaleY(0.15)}to{transform:scaleY(1)}}
     .micon{font-size:13px;color:rgba(255,255,255,0.35);margin-left:2px;}
+
+    /* ── STAT POPUP ── */
+    .stat-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity 0.3s;}
+    .stat-overlay.active{opacity:1;pointer-events:all;}
+    .stat-box{background:#0e0f12;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:32px 36px 28px;width:min(520px,92vw);position:relative;transform:translateY(16px) scale(0.97);transition:transform 0.3s;}
+    .stat-overlay.active .stat-box{transform:translateY(0) scale(1);}
+    .stat-close{position:absolute;top:14px;right:16px;background:none;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;line-height:1;transition:color 0.2s;}
+    .stat-close:hover{color:#fff;}
+    .stat-header{display:flex;align-items:center;gap:14px;margin-bottom:28px;}
+    .stat-avatar{width:52px;height:52px;border-radius:6px;object-fit:cover;background:#1e2024;}
+    .stat-avatar.no-img{display:flex;align-items:center;justify-content:center;font-size:22px;color:rgba(255,255,255,0.2);}
+    .stat-name{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:700;letter-spacing:2px;color:#fff;}
+    .stat-rank-label{font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:3px;color:rgba(255,255,255,0.3);margin-top:3px;}
+    .stat-radar-wrap{display:flex;justify-content:center;margin-bottom:24px;}
+    .stat-bars{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;}
+    .sbar-item{display:flex;flex-direction:column;gap:5px;}
+    .sbar-label{font-family:'Rajdhani',sans-serif;font-size:10px;letter-spacing:2px;color:rgba(255,255,255,0.4);display:flex;justify-content:space-between;}
+    .sbar-label span{color:rgba(255,255,255,0.7);font-family:'Share Tech Mono',monospace;}
+    .sbar-track{height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;}
+    .sbar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,#a78bfa,#7c3aed);transition:width 0.8s cubic-bezier(.4,0,.2,1);}
+    .sbar-fill.god{background:linear-gradient(90deg,#f5a623,#ff0080,#00e5ff,#f5a623);background-size:200%;animation:godBar 1.5s linear infinite;}
+    @keyframes godBar{0%{background-position:0%}100%{background-position:200%}}
+    .stat-divider{height:1px;background:rgba(255,255,255,0.06);margin:20px 0;}
   </style>
 </head>
 <body>
@@ -170,6 +193,24 @@
   <div id="members-root"></div>
 </div>
 
+<div class="stat-overlay" id="stat-overlay" onclick="closeStatPopup(event)">
+  <div class="stat-box">
+    <button class="stat-close" onclick="document.getElementById('stat-overlay').classList.remove('active')">✕</button>
+    <div class="stat-header">
+      <div id="stat-avatar-wrap"></div>
+      <div>
+        <div class="stat-name" id="stat-name"></div>
+        <div class="stat-rank-label" id="stat-rank-label"></div>
+      </div>
+    </div>
+    <div class="stat-radar-wrap">
+      <canvas id="stat-hex" width="280" height="280"></canvas>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-bars" id="stat-bars"></div>
+  </div>
+</div>
+
 <footer class="botbar">
   <div class="credit">SYSTEM DESIGN BY SILVA</div>
   <div class="mwidget" onclick="toggleMusic()" id="mwidget">
@@ -194,7 +235,6 @@ const ICONS = {
 
 const MEMBERS = [
   {rank:'FOUDER', name:'Zillx', lastname:'SIlva', fb:'https://www.facebook.com/sil.si.l.wa.2024', tiktok:'https://www.tiktok.com/@zill.silva2', youtube:'https://www.youtube.com/@zillsilva510', profile:'https://scontent.fbkk29-7.fna.fbcdn.net/v/t39.30808-6/480330232_613963054775052_6894066649046743575_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=13d280&_nc_ohc=adhDx1e_szAQ7kNvwGGeZu7&_nc_oc=AdnBmGbGWzVTUS6cZEVNPJPbGGzF4AEaARuJ-GMBsl9GJ14tlMPHGTyTRYAhfMIgTX8&_nc_zt=23&_nc_ht=scontent.fbkk29-7.fna&_nc_gid=RVyELZ4clvgON3jssd0Vug&oh=00_AfvGW9A5-qLeeJ33hZVrrbB4YFVTvf-jzTegBOmh_VQF-g&oe=699DD7BC'},
-  {rank:'LEADERS', name:'Chris', lastname:'SIlva', fb:'https://www.facebook.com/babyboss.silva', tiktok:'', youtube:'', profile:'https://scontent.fbkk29-4.fna.fbcdn.net/v/t39.30808-6/630462014_122173685750876241_2783045523192386537_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=53a332&_nc_ohc=lF6-MEI5-S0Q7kNvwHLHsKT&_nc_oc=Adl4_hxGEqelyNOtbpHen7Nx29yegAyl8hg5o8HqCmVSd03TqQOIy9EbjDTMl0-8fL0&_nc_zt=23&_nc_ht=scontent.fbkk29-4.fna&_nc_gid=oWBiq16VNu0NBt7sNj8I-Q&oh=00_AfviPjocDqC2Nroxx1KVJHRYuonmggQK8uB1G9G3p9XETQ&oe=699E07FF'},
   {rank:'LEADERS', name:'Safe', lastname:'SIlva', fb:'https://www.facebook.com/sxfetnn.boy', tiktok:'', youtube:'', profile:'https://scontent.fbkk29-4.fna.fbcdn.net/v/t39.30808-1/629278323_894061946747534_6500762420949417718_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=111&ccb=1-7&_nc_sid=e99d92&_nc_ohc=Lb-gyfcGeq0Q7kNvwFecWt-&_nc_oc=AdnabZVFJIH7fMoIgTeodlI9IJvTiwMn2qsTK-Q12iprSP-fdrArVumKy3bIo7NnGqU&_nc_zt=24&_nc_ht=scontent.fbkk29-4.fna&_nc_gid=FWmHoKVTCzSuYqM51chNQw&oh=00_AfuMi_rWP_MqfY4qdSUI438d4S8NarvdDSOUocbuPwHTNQ&oe=699DF282'},
   {rank:'LEADERS', name:'Jaynosx', lastname:'SIlva', fb:'https://www.facebook.com/jaynosx.sentury', tiktok:'', youtube:'https://www.youtube.com/@Jaynosx', profile:''},
   {rank:'LEADERS', name:'Lyker', lastname:'SIlva', fb:'https://www.facebook.com/lyker.glaywind', tiktok:'', youtube:'', profile:''},
@@ -298,10 +338,170 @@ function phTick(){
 phTick();
 setInterval(()=>{if(Math.random()<0.25){phTitle.classList.add('glitching');setTimeout(()=>phTitle.classList.remove('glitching'),200);}},4000);
 
+/* ── STAT DATA ── */
+const STAT_LABELS = ['ไม้','มีด','เทคนิค','การเอาตัวรอด','เสียง','ชุบ'];
+
+function getStats(name) {
+  const n = name.toLowerCase();
+  if (n === 'afei' || n.startsWith('afei ')) {
+    return [1000000, 1000000, 1000000, 1000000, 1000000, 1000000];
+  }
+  // seed random per name for consistency
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) & 0xffffffff;
+  return STAT_LABELS.map((_, i) => {
+    const r = Math.abs(Math.sin(h + i * 7919)) ;
+    return Math.round(50 + r * 10);
+  });
+}
+
+function drawHex(canvas, stats, isGod) {
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+  const cx = W / 2, cy = H / 2, R = Math.min(W, H) * 0.34;
+  const N = 6;
+  const angle = i => (Math.PI / 180) * (60 * i - 90);
+
+  // grid rings
+  [0.25, 0.5, 0.75, 1].forEach(f => {
+    ctx.beginPath();
+    for (let i = 0; i < N; i++) {
+      const x = cx + R * f * Math.cos(angle(i));
+      const y = cy + R * f * Math.sin(angle(i));
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = 'rgba(255,255,255,0.07)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  });
+
+  // axes
+  for (let i = 0; i < N; i++) {
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + R * Math.cos(angle(i)), cy + R * Math.sin(angle(i)));
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // stat polygon
+  const maxVal = isGod ? 1000000 : 70;
+  ctx.beginPath();
+  stats.forEach((v, i) => {
+    const ratio = Math.min(v / maxVal, 1);
+    const x = cx + R * ratio * Math.cos(angle(i));
+    const y = cy + R * ratio * Math.sin(angle(i));
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.closePath();
+  if (isGod) {
+    const grad = ctx.createLinearGradient(cx - R, cy - R, cx + R, cy + R);
+    grad.addColorStop(0, 'rgba(245,166,35,0.5)');
+    grad.addColorStop(0.33, 'rgba(255,0,128,0.5)');
+    grad.addColorStop(0.66, 'rgba(0,229,255,0.5)');
+    grad.addColorStop(1, 'rgba(245,166,35,0.5)');
+    ctx.fillStyle = grad;
+    ctx.strokeStyle = '#f5a623';
+  } else {
+    ctx.fillStyle = 'rgba(167,139,250,0.2)';
+    ctx.strokeStyle = 'rgba(167,139,250,0.8)';
+  }
+  ctx.lineWidth = 2;
+  ctx.fill();
+  ctx.stroke();
+
+  // dots
+  stats.forEach((v, i) => {
+    const ratio = Math.min(v / maxVal, 1);
+    const x = cx + R * ratio * Math.cos(angle(i));
+    const y = cy + R * ratio * Math.sin(angle(i));
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = isGod ? '#f5a623' : '#a78bfa';
+    ctx.fill();
+  });
+
+  // labels
+  ctx.font = "bold 12px 'Rajdhani', sans-serif";
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  STAT_LABELS.forEach((lbl, i) => {
+    const lx = cx + (R + 26) * Math.cos(angle(i));
+    const ly = cy + (R + 26) * Math.sin(angle(i));
+    ctx.fillStyle = isGod ? '#f5a623' : 'rgba(255,255,255,0.5)';
+    ctx.fillText(lbl, lx, ly);
+  });
+}
+
+function openStatPopup(member, rankLabel) {
+  const name = member.lastname ? `${member.name} ${member.lastname}` : member.name;
+  const stats = getStats(member.name);
+  const isGod = member.name.toLowerCase() === 'afei';
+
+  document.getElementById('stat-name').textContent = name;
+  document.getElementById('stat-rank-label').textContent = `◆ ${rankLabel}`;
+
+  const aw = document.getElementById('stat-avatar-wrap');
+  if (member.profile) {
+    aw.innerHTML = `<img class="stat-avatar" src="${member.profile}" alt="${member.name}" onerror="this.outerHTML='<div class=\\'stat-avatar no-img\\'>👤</div>'">`;
+  } else {
+    aw.innerHTML = `<div class="stat-avatar no-img">👤</div>`;
+  }
+
+  // bars
+  const maxVal = isGod ? 1000000 : 70;
+  const barsEl = document.getElementById('stat-bars');
+  barsEl.innerHTML = STAT_LABELS.map((lbl, i) => {
+    const pct = Math.min((stats[i] / maxVal) * 100, 100);
+    const display = isGod ? stats[i].toLocaleString() : stats[i];
+    return `<div class="sbar-item">
+      <div class="sbar-label">${lbl}<span>${display}</span></div>
+      <div class="sbar-track"><div class="sbar-fill${isGod ? ' god' : ''}" style="width:0%" data-pct="${pct}"></div></div>
+    </div>`;
+  }).join('');
+
+  const canvas = document.getElementById('stat-hex');
+  drawHex(canvas, stats, isGod);
+
+  document.getElementById('stat-overlay').classList.add('active');
+
+  // animate bars after paint
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    document.querySelectorAll('.sbar-fill').forEach(el => {
+      el.style.width = el.dataset.pct + '%';
+    });
+  }));
+}
+
+function closeStatPopup(e) {
+  if (e.target === document.getElementById('stat-overlay')) {
+    document.getElementById('stat-overlay').classList.remove('active');
+  }
+}
+
 renderMembers(MEMBERS);
 
-/* ── MUSIC ── */
-const audio=document.getElementById('bgmusic');
+// Attach stat popup click to each card
+(function attachStatClicks() {
+  const RANK_LABELS = {FOUDER:'FOUNDER',LEADERS:'LEADERS',SENIORS:'SENIORS',MEMBERS:'MEMBERS'};
+  MEMBERS.forEach(m => {
+    const fullName = (m.lastname ? `${m.name} ${m.lastname}` : m.name).toLowerCase();
+    document.querySelectorAll('.mcard').forEach(card => {
+      if (card.dataset.name && card.dataset.name.startsWith(fullName + ' ')) {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', (e) => {
+          if (e.target.closest('.slink')) return;
+          openStatPopup(m, RANK_LABELS[m.rank.toUpperCase()] || m.rank);
+        });
+      }
+    });
+  });
+})();
+
+/* ── MUSIC ── */const audio=document.getElementById('bgmusic');
 let isPaused=false,unmuteTriggered=false;
 audio.volume=0.7;audio.muted=true;audio.play().catch(()=>{});
 const UNMUTE_EVENTS=['click','touchstart','mousedown'];
